@@ -34,5 +34,6 @@ fi
 
 run_id="$(jq -er '.id' <<<"${run}")"
 run_attempt="$(jq -er '.run_attempt' <<<"${run}")"
+echo "workflow-id=${workflow_id:?}" | tee -a "$GITHUB_OUTPUT"
 echo "run-id=${run_id:?}" | tee -a "$GITHUB_OUTPUT"
 echo "run-attempt=${run_attempt:?}" | tee -a "$GITHUB_OUTPUT"

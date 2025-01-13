@@ -30,5 +30,6 @@ jobs:
       - name: Test
         run: |
           set -x
+          [[ "${{ steps.workflow.outputs.workflow-id }}" -eq 137922876 ]] || exit 1
           [[ "${{ steps.workflow.outputs.run-id }}" -eq "${{ github.run_id }}" ]] || exit 1
           [[ "${{ steps.workflow.outputs.run-attempt }}" -eq "${{ github.run_attempt }}" ]] || exit 1
