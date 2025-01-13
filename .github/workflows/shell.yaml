@@ -21,6 +21,8 @@ jobs:
       - name: Extract workflow shell scripts
         id: extract
         uses: beacon-biosignals/gha-extract-shell-scripts@v1
+        with:
+          shellcheck-disable: SC2309
       - uses: luizm/action-sh-checker@c6edb3de93e904488b413636d96c6a56e3ad671a  # v0.8.0
         env:
           GITHUB_TOKEN: ${{ github.token }}

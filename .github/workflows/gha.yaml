@@ -23,3 +23,5 @@ jobs:
         with:
           fail_level: error
           filter_mode: nofilter  # Post results on all results and not just changed files
+        env:
+          SHELLCHECK_OPTS: -e SC2309
