@@ -17,7 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: sleep 10
+      # Wait a little bit to ensure the GitHub API query can find the workflow.
+      - name: Delay
+        run: sleep 5
       - uses: ./
         id: workflow
         with:
