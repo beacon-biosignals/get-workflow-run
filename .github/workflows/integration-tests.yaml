@@ -22,7 +22,7 @@ jobs:
         id: workflow
         with:
           workflow-file: integration-tests.yaml
-          commit-sha: ${{ github.sha }}
+          commit-sha: ${{ github.event.pull_request.head.sha || github.sha }}  # Run is associated with HEAD commit
           status: in_progress
       - name: Test
         run: |
