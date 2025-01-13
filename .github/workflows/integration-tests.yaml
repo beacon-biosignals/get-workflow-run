@@ -23,7 +23,7 @@ jobs:
         with:
           workflow-file: integration-tests.yaml
           commit-sha: ${{ github.sha }}
-          status: running
+          status: in_progress
       - name: Test
         run: |
           set -x
