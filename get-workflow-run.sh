@@ -9,6 +9,7 @@
 #   to "any" for any status.
 
 set -eo pipefail
+set -x
 
 status="${status:-any}"
 
