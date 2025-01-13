@@ -8,26 +8,20 @@ Determine the latest workflow run for a given workflow file and commit SHA.
 ---
 jobs:
   test:
-    permissions: {}
+    # These permissions are needed to:
+    # - Get the workflow run: https://github.com/beacon-biosignals/get-workflow-run#permissions
+    permissions:
+      actions: read
     runs-on: ubuntu-latest
     steps:
-      - uses: beacon-biosignals/download-run-attempt-artifact@v1
-        if: ${{ github.run-attempt > 1 }}
+      - uses: beacon-biosignals/get-workflow-run@v1
+        id: workflow
         with:
-          run-id: ${{ github.run_id }}
-          run-attempt: ${{ github.run_attempt }}
-          allow-fallback: true
-      - name: Show downloaded run-attempt file
-        if: ${{ github.run_attempt > 1 }}
+          workflow-file: ci.yaml
+          commit: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Show run details
         run: |
-          cat run-attempt
-      - name: Create run-attempt file
-        run: |
-          echo "${{ github.run_attempt }}" >run-attempt
-      - uses: actions/upload-artifact
-        with:
-          name: my-artifact
-          path: run-attempt
+          echo "${{ toJSON(steps.workflow.outputs) }}"
 ```
 
 ## Inputs

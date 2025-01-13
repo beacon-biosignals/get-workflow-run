@@ -9,7 +9,6 @@
 #   to "any" for any status.
 
 set -eo pipefail
-set -x
 
 status="${status:-any}"
 
@@ -28,6 +27,11 @@ fi
 # Determine the latest workflow run associated with the `commit_sha`
 # https://docs.github.com/en/rest/actions/workflow-runs?apiVersion=2022-11-28#list-workflow-runs-for-a-repository
 run="$(gh api -X GET --paginate "/repos/{owner}/{repo}/actions/runs" -f head_sha="${commit_sha:?}" "${flags[@]}" --jq ".workflow_runs | map(select(.workflow_id == ${workflow_id:?})) | sort_by(.run_number, .run_attempt) | .[-1]")"
+if [[ -z "${run}" ]]; then
+    echo "Unable to locate any workflow runs for commit SHA ${commit_sha} and status \"${status}\"." >&2
+    exit 1
+fi
+
 run_id="$(jq -er '.id' <<<"${run}")"
 run_attempt="$(jq -er '.run_attempt' <<<"${run}")"
 echo "run-id=${run_id:?}" | tee -a "$GITHUB_OUTPUT"
