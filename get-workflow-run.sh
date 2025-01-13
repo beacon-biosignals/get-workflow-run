@@ -13,7 +13,7 @@ set -eo pipefail
 status="${status:-any}"
 
 workflow_id="$(gh api -X GET --paginate "/repos/{owner}/{repo}/actions/workflows" --jq ".workflows[] | select(.path == \".github/workflows/${workflow_file:?}\").id")"
-echo "workflow_id=${workflow_id:?}" | tee -a "$GITHUB_OUTPUT"
+echo "workflow-id=${workflow_id:?}" | tee -a "$GITHUB_OUTPUT"
 
 flags=()
 valid_statuses=(completed action_required cancelled failure neutral skipped stale success timed_out in_progress queued requested waiting pending)
@@ -34,6 +34,5 @@ fi
 
 run_id="$(jq -er '.id' <<<"${run}")"
 run_attempt="$(jq -er '.run_attempt' <<<"${run}")"
-echo "workflow-id=${workflow_id:?}" | tee -a "$GITHUB_OUTPUT"
 echo "run-id=${run_id:?}" | tee -a "$GITHUB_OUTPUT"
 echo "run-attempt=${run_attempt:?}" | tee -a "$GITHUB_OUTPUT"
