@@ -1,5 +1,9 @@
-# Intended Audience: Beacon Biosignals
 ---
+name: Get Workflow Run
+description: Determine the latest workflow run for a given workflow file and commit SHA.
+branding:
+  color: yellow
+  icon: at-sign
 inputs:
   workflow-file:
     required: true

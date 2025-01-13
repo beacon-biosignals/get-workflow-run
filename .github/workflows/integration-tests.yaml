@@ -22,10 +22,13 @@ jobs:
         id: workflow
         with:
           workflow-file: integration-tests.yaml
-          commit: ${{ github.sha }}
+          commit-sha: ${{ github.sha }}
           status: running
       - name: Test
         run: |
           set -x
-          [[ "${{ steps.workflow.outputs.run-id }}" -eq "${{ github.run_id }}" ]] || exit 1
-          [[ "${{ steps.workflow.outputs.run-attempt }}" -eq "${{ github.run_attempt }}" ]] || exit 1
+          [[ "${run_id}" -eq "${{ github.run_id }}" ]] || exit 1
+          [[ "${run_attempt}" -eq "${{ github.run_attempt }}" ]] || exit 1
+        env:
+          run_id: ${{ steps.workflow.outputs.run-id }}
+          run_attempt: ${{ steps.workflow.outputs.run-attempt }}
