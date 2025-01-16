@@ -1,0 +1,38 @@
+---
+name: Get Workflow Run
+description: Determine the latest workflow run for a given workflow file and commit SHA.
+branding:
+  color: yellow
+  icon: at-sign
+inputs:
+  workflow-file:
+    required: true
+  commit-sha:
+    required: true
+  status:
+    required: true
+    default: "any"
+  repository:
+    default: ${{ github.repository }}
+  token:
+    default: ${{ github.token }}
+outputs:
+  workflow-id:
+    value: ${{ steps.get-workflow-run.outputs.workflow-id }}
+  run-id:
+    value: ${{ steps.get-workflow-run.outputs.run-id }}
+  run-attempt:
+    value: ${{ steps.get-workflow-run.outputs.run-attempt }}
+runs:
+  using: composite
+  steps:
+    - name: Get workflow run
+      id: get-workflow-run
+      shell: bash
+      run: ${{ github.action_path }}/get-workflow-run.sh
+      env:
+        GH_REPO: ${{ inputs.repository }}
+        GH_TOKEN: ${{ inputs.token }}
+        workflow_file: ${{ inputs.workflow-file }}
+        commit_sha: ${{ inputs.commit-sha }}
+        status: ${{ inputs.status }}

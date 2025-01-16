@@ -1,0 +1,37 @@
+---
+name: Integration Tests
+on:
+  pull_request:
+    paths:
+      - "action.yaml"
+      - ".github/workflows/integration-tests.yaml"
+
+jobs:
+  test:
+    name: Test
+    # These permissions are needed to:
+    # - Checkout the repo
+    permissions:
+      actions: read
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Wait a little bit to ensure the GitHub API query can find the workflow.
+      - name: Delay
+        run: sleep 5
+      - uses: ./
+        id: workflow
+        with:
+          workflow-file: integration-tests.yaml
+          commit-sha: ${{ github.event.pull_request.head.sha || github.sha }}  # Run is associated with HEAD commit
+          status: in_progress
+      - name: Show run details
+        run: |
+          echo "${{ toJSON(steps.workflow.outputs) }}"
+      - name: Test
+        run: |
+          set -x
+          [[ "${{ steps.workflow.outputs.workflow-id }}" -eq 137922876 ]] || exit 1
+          [[ "${{ steps.workflow.outputs.run-id }}" -eq "${{ github.run_id }}" ]] || exit 1
+          [[ "${{ steps.workflow.outputs.run-attempt }}" -eq "${{ github.run_attempt }}" ]] || exit 1
