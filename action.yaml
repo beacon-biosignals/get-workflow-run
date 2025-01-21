@@ -12,6 +12,10 @@ inputs:
   status:
     required: true
     default: "any"
+  timeout:
+    default: 30
+  poll_interval:
+    default: 1
   repository:
     default: ${{ github.repository }}
   token:
